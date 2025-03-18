@@ -1,27 +1,20 @@
 import { useEffect, useState } from 'react';
+import { getPeople } from '../api';
 import PeopleTable from '../components/Loader/PeopleTable';
-
-export interface Person {
-  id: number;
-  name: string;
-  sex: 'm' | 'f';
-  born: number;
-  died: number | null;
-  motherName: string | null;
-  fatherName: string | null;
-  slug: string;
-  isSelected: boolean;
-}
+import { Person } from '../types/Person';
 
 const PeoplePage = () => {
   const [people, setPeople] = useState<Person[]>([]);
 
   useEffect(() => {
     const fetchPeople = async () => {
-      const response = await fetch('/api/people');
-      const data = await response.json();
+      const data = await getPeople();
+      const peopleWithSelection = data.map(person => ({
+        ...person,
+        isSelected: false,
+      }));
 
-      setPeople(data);
+      setPeople(peopleWithSelection);
     };
 
     fetchPeople();
@@ -30,7 +23,6 @@ const PeoplePage = () => {
   return (
     <div>
       <h1 className="title">People Page</h1>
-
       <PeopleTable people={people} />
     </div>
   );

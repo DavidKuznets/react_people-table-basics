@@ -1,16 +1,5 @@
 import PersonLink from './PersonLink';
-
-interface Person {
-  id: number;
-  name: string;
-  sex: 'm' | 'f';
-  born: number;
-  died: number | null;
-  motherName: string | null;
-  fatherName: string | null;
-  slug: string;
-  isSelected: boolean;
-}
+import { Person } from '../../types';
 
 interface PeopleTableProps {
   people: Person[];
@@ -32,17 +21,21 @@ const PeopleTable = ({ people }: PeopleTableProps) => {
       <tbody>
         {people.map(person => (
           <tr
-            key={person.id}
+            key={person.slug}
             className={person.isSelected ? 'has-background-warning' : ''}
           >
             <td>
-              <PersonLink person={person} />
+              <PersonLink person={person} />{' '}
             </td>
             <td>{person.sex}</td>
             <td>{person.born}</td>
             <td>{person.died}</td>
-            <td>{person.motherName || '-'}</td>
-            <td>{person.fatherName || '-'}</td>
+            <td>
+              {person.mother ? <PersonLink person={person.mother} /> : '-'}
+            </td>
+            <td>
+              {person.father ? <PersonLink person={person.father} /> : '-'}
+            </td>
           </tr>
         ))}
       </tbody>
