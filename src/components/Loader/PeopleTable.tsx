@@ -7,39 +7,46 @@ interface PeopleTableProps {
 
 const PeopleTable = ({ people }: PeopleTableProps) => {
   return (
-    <table>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Sex</th>
-          <th>Born</th>
-          <th>Died</th>
-          <th>Mother</th>
-          <th>Father</th>
-        </tr>
-      </thead>
-      <tbody>
-        {people.map(person => (
-          <tr
-            key={person.slug}
-            className={person.isSelected ? 'has-background-warning' : ''}
-          >
-            <td>
-              <PersonLink person={person} />{' '}
-            </td>
-            <td>{person.sex}</td>
-            <td>{person.born}</td>
-            <td>{person.died}</td>
-            <td>
-              {person.mother ? <PersonLink person={person.mother} /> : '-'}
-            </td>
-            <td>
-              {person.father ? <PersonLink person={person.father} /> : '-'}
-            </td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
+    <div>
+      {' '}
+      {people.length === 0 ? (
+        <p data-cy="noPeopleMessage" className="has-text-centered">
+          No people found
+        </p>
+      ) : (
+        <table data-cy="peopleTable">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Sex</th>
+              <th>Born</th>
+              <th>Died</th>
+              <th>Mother</th>
+              <th>Father</th>
+            </tr>
+          </thead>
+          <tbody>
+            {people.map(person => (
+              <tr key={person.slug} data-cy="person">
+                {' '}
+                <td>
+                  <PersonLink person={person} />
+                </td>
+                <td>{person.sex}</td>
+                <td>{person.born}</td>
+                <td>{person.died}</td>
+                <td data-cy={`mother-${person.slug}`}>
+                  {person.mother?.name ? person.mother.name : '-'}
+                </td>
+                <td data-cy={`father-${person.slug}`}>
+                  {person.father?.name ? person.father.name : '-'}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      )}
+    </div>
   );
 };
 

@@ -5,16 +5,21 @@ import { Person } from '../types/Person';
 
 const PeoplePage = () => {
   const [people, setPeople] = useState<Person[]>([]);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchPeople = async () => {
-      const data = await getPeople();
-      const peopleWithSelection = data.map(person => ({
-        ...person,
-        isSelected: false,
-      }));
+      try {
+        const data = await getPeople();
+        const peopleWithSelection = data.map(person => ({
+          ...person,
+          isSelected: false,
+        }));
 
-      setPeople(peopleWithSelection);
+        setPeople(peopleWithSelection);
+      } catch (err) {
+        setError('Failed to load people');
+      }
     };
 
     fetchPeople();
@@ -23,7 +28,14 @@ const PeoplePage = () => {
   return (
     <div>
       <h1 className="title">People Page</h1>
-      <PeopleTable people={people} />
+
+      {error ? (
+        <p data-cy="peopleLoadingError" className="has-text-danger">
+          {error}
+        </p>
+      ) : (
+        <PeopleTable people={people} />
+      )}
     </div>
   );
 };
