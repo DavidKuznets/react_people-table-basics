@@ -5,20 +5,27 @@ import { Person } from '../types/Person';
 
 const PeoplePage = () => {
   const [people, setPeople] = useState<Person[]>([]);
-  const [error, setError] = useState<string | null>(null);
+  const [loadingError, setLoadingError] = useState(false);
 
   useEffect(() => {
     const fetchPeople = async () => {
       try {
         const data = await getPeople();
-        const peopleWithSelection = data.map(person => ({
-          ...person,
-          isSelected: false,
-        }));
+        const peopleWithParents = data.map(person => {
+          const mother = data.find(p => p.name === person.motherName) || null;
+          const father = data.find(p => p.name === person.fatherName) || null;
 
-        setPeople(peopleWithSelection);
-      } catch (err) {
-        setError('Failed to load people');
+          return {
+            ...person,
+            mother,
+            father,
+          };
+        });
+
+        setPeople(peopleWithParents);
+      } catch (error) {
+        setPeople([]);
+        setLoadingError(true);
       }
     };
 
@@ -28,14 +35,12 @@ const PeoplePage = () => {
   return (
     <div>
       <h1 className="title">People Page</h1>
-
-      {error ? (
-        <p data-cy="peopleLoadingError" className="has-text-danger">
-          {error}
+      {loadingError && (
+        <p data-cy="peopleLoadingError" className="error-message">
+          There was an error loading the people. Please try again later.
         </p>
-      ) : (
-        <PeopleTable people={people} />
       )}
+      <PeopleTable people={people} />
     </div>
   );
 };

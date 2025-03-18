@@ -8,7 +8,6 @@ interface PeopleTableProps {
 const PeopleTable = ({ people }: PeopleTableProps) => {
   return (
     <div>
-      {' '}
       {people.length === 0 ? (
         <p data-cy="noPeopleMessage" className="has-text-centered">
           No people found
@@ -28,7 +27,6 @@ const PeopleTable = ({ people }: PeopleTableProps) => {
           <tbody>
             {people.map(person => (
               <tr key={person.slug} data-cy="person">
-                {' '}
                 <td>
                   <PersonLink person={person} />
                 </td>
@@ -36,10 +34,10 @@ const PeopleTable = ({ people }: PeopleTableProps) => {
                 <td>{person.born}</td>
                 <td>{person.died}</td>
                 <td data-cy={`mother-${person.slug}`}>
-                  {person.mother?.name ? person.mother.name : '-'}
+                  {person.mother ? person.mother.name : '-'}
                 </td>
                 <td data-cy={`father-${person.slug}`}>
-                  {person.father?.name ? person.father.name : '-'}
+                  {person.father ? person.father.name : '-'}
                 </td>
               </tr>
             ))}
