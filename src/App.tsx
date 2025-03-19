@@ -1,40 +1,34 @@
-import { Loader } from './components/Loader';
-import './App.scss';
-import { Route, Routes, useLocation } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import { Route, Routes, Navigate, useLocation } from 'react-router-dom';
+import { useState, useEffect } from 'react';
 import HomePage from './page/HomePage';
 import PageNotFound from './page/PageNotFound';
 import PeoplePage from './page/PeoplePage';
-import PersonDetailsPage from './page/PersonDetailsPage';
-import { Navigations } from './components/Loader/Navigations';
-import { Navigate } from 'react-router-dom';
+import { Navigations } from './Components/Navigations';
+import { Loader } from './Loader/Loader';
+import './App.scss';
 
 export const App = () => {
-  const [loading, setLoading] = useState(false); // Початково false
+  const [loading, setLoading] = useState(false);
   const location = useLocation();
 
   useEffect(() => {
     if (location.pathname.startsWith('/people')) {
-      setLoading(true);
-      setTimeout(() => {
-        setLoading(false);
-      }, 3000);
+      setLoading(false);
     }
   }, [location.pathname]);
 
   return (
     <div data-cy="app">
       {loading ? (
-        <Loader /> // Показуємо Loader, коли loading === true
+        <Loader />
       ) : (
         <>
           <main className="section">
             <div className="container">
               <Routes>
                 <Route path="/" element={<HomePage />} />
-                <Route path="/home" element={<Navigate to="/" />} />
+                <Route path="/home" element={<Navigate to="/" replace />} />
                 <Route path="/people" element={<PeoplePage />} />
-                <Route path="/people/:slug" element={<PersonDetailsPage />} />
                 <Route path="*" element={<PageNotFound />} />
               </Routes>
             </div>
