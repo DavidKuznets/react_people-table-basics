@@ -1,5 +1,5 @@
-import { Route, Routes, Navigate, useLocation } from 'react-router-dom';
-import { useState, useEffect } from 'react';
+import { Route, Routes, Navigate } from 'react-router-dom';
+import { useState } from 'react';
 import HomePage from './page/HomePage';
 import PageNotFound from './page/PageNotFound';
 import PeoplePage from './page/PeoplePage';
@@ -8,14 +8,7 @@ import { Loader } from './Loader/Loader';
 import './App.scss';
 
 export const App = () => {
-  const [loading, setLoading] = useState(false);
-  const location = useLocation();
-
-  useEffect(() => {
-    if (location.pathname.startsWith('/people')) {
-      setLoading(false);
-    }
-  }, [location.pathname]);
+  const [loading] = useState(false);
 
   return (
     <div data-cy="app">
