@@ -1,16 +1,13 @@
-import { useState } from 'react';
+import { useParams } from 'react-router-dom';
 import { Person } from '../types';
+import PersonLink from './PersonLink';
 
 interface PeopleTableProps {
   people: Person[];
 }
 
 const PeopleTable = ({ people }: PeopleTableProps) => {
-  const [selectedPerson, setSelectedPerson] = useState<Person | null>(null);
-
-  const handleRowClick = (person: Person) => {
-    setSelectedPerson(person); // Встановлюємо вибрану людину
-  };
+  const { slug } = useParams();
 
   return (
     <div>
@@ -36,39 +33,26 @@ const PeopleTable = ({ people }: PeopleTableProps) => {
           <tbody>
             {people.map(person => (
               <tr
-                key={person.name}
+                key={person.slug}
                 data-cy="person"
-                className={
-                  selectedPerson?.name === person.name
-                    ? 'has-background-warning'
-                    : ''
-                }
-                onClick={() => handleRowClick(person)} // Підсвічуємо рядок
+                className={person.slug === slug ? 'has-background-warning' : ''}
               >
                 <td>
-                  <span
-                    className={
-                      person.sex === 'f' ? 'has-text-danger' : 'has-text-info'
-                    }
-                  >
-                    {person.name}
-                  </span>
+                  <PersonLink person={person} />
                 </td>
                 <td>{person.sex}</td>
                 <td>{person.born}</td>
                 <td>{person.died}</td>
                 <td>
                   {person.mother ? (
-                    <span className="has-text-danger">
-                      {person.mother.name}
-                    </span>
+                    <PersonLink person={person.mother} />
                   ) : (
                     person.motherName || '-'
                   )}
                 </td>
                 <td>
                   {person.father ? (
-                    <span className="has-text-info">{person.father.name}</span>
+                    <PersonLink person={person.father} />
                   ) : (
                     person.fatherName || '-'
                   )}

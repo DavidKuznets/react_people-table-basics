@@ -1,11 +1,18 @@
 import { Link } from 'react-router-dom';
 import { Person } from '../types';
 
-const PersonLink = ({ person }: { person: Person }) => {
+interface PersonLinkProps {
+  person: Person;
+  className?: string;
+}
+
+const PersonLink: React.FC<PersonLinkProps> = ({ person, className = '' }) => {
+  const sexClass = person.sex === 'm' ? 'has-text-info' : 'has-text-danger';
+
   return (
     <Link
       to={`/people/${person.slug}`}
-      className={person.sex === 'f' ? 'has-text-danger' : ''}
+      className={`has-text-weight-bold ${sexClass} ${className}`}
     >
       {person.name}
     </Link>
